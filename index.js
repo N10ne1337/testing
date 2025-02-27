@@ -26,27 +26,64 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     const fingerprint = generateFingerprint();
     res.send(`
-        <h1>Текущий браузер/отпечаток:</h1>
-        <p>Браузер: ${fingerprint.browser}</p>
-        <p>ОС: ${fingerprint.os}</p>
-        <p>Язык: ${fingerprint.language}</p>
-        <p>User Agent: ${fingerprint.userAgent}</p>
-        <p>Обновите страницу для изменения отпечатка.</p>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Antidetect Browser</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+                iframe {
+                    width: 100%;
+                    height: 80vh;
+                    border: 1px solid #ccc;
+                    margin-top: 20px;
+                }
+                input[type="text"] {
+                    width: 300px;
+                    padding: 10px;
+                    font-size: 16px;
+                }
+                button {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Текущий браузер/отпечаток:</h1>
+            <p>Браузер: ${fingerprint.browser}</p>
+            <p>ОС: ${fingerprint.os}</p>
+            <p>Язык: ${fingerprint.language}</p>
+            <p>User Agent: ${fingerprint.userAgent}</p>
+            <p>Обновите страницу для изменения отпечатка.</p>
 
-        <h2>Перейти на сайт:</h2>
-        <form action="/visit" method="POST">
-            <input type="url" name="url" placeholder="Введите URL сайта" required>
-            <button type="submit">Перейти</button>
-        </form>
+            <h2>Загрузить сайт:</h2>
+            <form id="urlForm">
+                <input type="text" id="urlInput" placeholder="Введите URL сайта (например, example.com)" required>
+                <button type="submit">Загрузить</button>
+            </form>
+
+            <iframe id="siteFrame" src="" frameborder="0"></iframe>
+
+            <script>
+                document.getElementById('urlForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let url = document.getElementById('urlInput').value.trim();
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+                    document.getElementById('siteFrame').src = url;
+                });
+            </script>
+        </body>
+        </html>
     `);
-});
-
-app.post('/visit', (req, res) => {
-    const url = req.body.url;
-    if (!url) {
-        return res.status(400).send('URL не указан.');
-    }
-    res.redirect(url);
 });
 
 app.listen(port, () => {
