@@ -1,12 +1,12 @@
 {
-       "name": "antidetect-browser",
-       "version": "1.0.0",
-       "description": "Antidetect browser fingerprint generator",
-       "main": "index.js",
-       "scripts": {
-         "start": "node index.js"
-       },
-       "dependencies": {
-         "express": "^4.18.2"
-       }
+  "name": "antidetect-browser",
+  "version": "1.0.0",
+  "description": "Antidetect browser fingerprint generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
